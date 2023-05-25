@@ -21,20 +21,25 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const startServer = async () => {
-  await server.start();
-  server.applyMiddleware({ app });
+  try {
+    await db; // Wait for the database connection to establish
+    await server.start();
+    server.applyMiddleware({ app });
 
-  // All remaining requests return the React app, so it's important this line is last.
-  if (process.env.NODE_ENV === 'production') {
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+    // All remaining requests return the React app, so it's important this line is last.
+    if (process.env.NODE_ENV === 'production') {
+      app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+      });
+    }
+
+    app.listen(PORT, () => {
+      console.log(`Now listening on localhost:${PORT}`);
+      console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
     });
+  } catch (err) {
+    console.error('Failed to connect to the database', err);
   }
-
-  app.listen(PORT, () => {
-    console.log(`Now listening on localhost:${PORT}`);
-    console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
-  });
 };
 
 startServer();

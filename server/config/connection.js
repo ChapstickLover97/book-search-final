@@ -1,13 +1,16 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/googlebooks', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
   useFindAndModify: false
-}).then(() => {
+})
+.then(() => {
   console.log('MongoDB connected successfully!');
-}).catch(err => {
+})
+.catch(err => {
   console.log(`MongoDB connection error: ${err}`);
 });
 

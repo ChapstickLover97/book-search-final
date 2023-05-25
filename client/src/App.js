@@ -9,7 +9,8 @@ import Navbar from './components/Navbar';
 import AuthService from './utils/auth'; // Import your AuthService or token handling logic
 
 const httpLink = createHttpLink({
-  uri: '/graphql',
+  uri: process.env.NODE_ENV === 'production' ?
+    'https://book-search-chapsticklover97.herokuapp.com/graphql' : '/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
